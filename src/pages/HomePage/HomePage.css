@@ -1,0 +1,13 @@
+div.main-con {
+  width: calc(100% -2em);
+  display: flex;
+  justify-content: space-around;
+  height: 70vh;
+  padding: 2em;
+}
+
+#line {
+  background-color: white;
+  height: 100%;
+  width: 3px;
+}
