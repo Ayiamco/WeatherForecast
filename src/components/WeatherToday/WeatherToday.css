@@ -1,0 +1,14 @@
+.w-left {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 0.7em;
+}
+
+.w-left-1 p {
+  color: #fff;
+}
+
+.w-left-2 p {
+  margin-top: 0.3em;
+}

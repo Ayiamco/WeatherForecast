@@ -11,6 +11,7 @@ export default function HomePage() {
     const [location,setLocation]=useState("");
     const [weatherToday,setWeatherToday]=useState([])
     const [weatherFuture,setWeatherFuture]=useState([])
+    const [locationDisp,setLocationDisp]=useState("");
 
     useEffect(()=>{
         
@@ -22,17 +23,18 @@ export default function HomePage() {
         //remove display from previous forecast
         setWeatherFuture([]);
         setWeatherToday([]);
+        setLocationDisp(location);
 
         //get weather forecast
         const data=getData(location);
 
-        //update UI without forecast
+        //update UI with forecast
         data.then((res)=>{
             let container=[]
-            res.forEach(element => {
+            res.forEach( (element,index) => {
 
                 //collect all the data for today
-                if(element.day===dayNames.Today){
+                if(index<5){
                     setWeatherToday(prev=>{
                         return [...prev,element]
                     })
@@ -59,39 +61,44 @@ export default function HomePage() {
                 handleForm={handleForm} isInputEmpty={isInputEmpty} setIsInputEmpty={setIsInputEmpty} 
                 location={location} setLocation={setLocation} 
             />  
-            {weatherToday.length < 1 ? "":
-                <section id="weather-main">
-                    <p>
-                        <span>{location}</span>
-                        {new Date(Date.now()).toDateString()}
-                    </p>
-                    <p>
-                        {weatherToday[0].temp}&#8451;
-                    </p>
-            </section>
-            }
-            
-
-            <div className="main-con">
-                <section id="">
-                    {weatherToday.map( (obj,index) => {
-                        return (<WeatherToday key={obj.time + index} weatherIcon={obj.desc}
-                             time={obj.time} temp={obj.temp}/>)
-                    })}
-                </section>
-                {
-                    weatherFuture.length===0 ? "":<div id="line"></div>
-                }
+            {
+                weatherToday.length < 1 ? "" :
                 
-                <aside id="">
-                    {weatherFuture.map( (obj,index) => {
-                        return (<WeatherFuture key={obj.time+index} weatherIcon={obj.desc} time={obj.time}
-                             tempMax={obj.tempMax} tempMin={obj.tempMin} dayName={obj.day}/>)
-                    })}
-                </aside>
-            </div>
+                <div>
+                    {/* weather summary for today section */}
+                    <section id="weather-main">
+                            <p>
+                                <span>{locationDisp.toUpperCase()}</span>
+                                {new Date(Date.now()).toDateString()}
+                            </p>
+                            <p>
+                                {weatherToday[0].temp}&#8451;
+                            </p>
+                    </section>
 
+                    
 
+                    <div className="w-con-main">
+                        {/* future weather section */}
+                        <section className="w-con"id="w-con-left" >
+                            {weatherToday.map( (obj,index) => {
+                                return (<WeatherToday key={obj.time + index} weatherIcon={obj.desc}
+                                    time={obj.time} temp={obj.temp}/>)
+                            })}
+                        </section>
+                        
+                        {/* future weather section */}
+                        <section className="w-con" id="w-con-right">
+                            {weatherFuture.map( (obj,index) => {
+                                return (<WeatherFuture key={obj.time+index} weatherIcon={obj.desc} time={obj.time}
+                                    tempMax={obj.tempMax} tempMin={obj.tempMin} dayName={obj.day}/>)
+                            })}
+                        </section>
+                    </div>
+                            
+                </div>
+            
+                }
            
         </div>
     )
